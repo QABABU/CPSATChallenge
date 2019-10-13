@@ -1,12 +1,17 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.JavascriptExecutor;
+import utils.ExcelDataReader;
 
 import java.util.concurrent.TimeUnit;
 
@@ -41,12 +46,21 @@ public class HomeTownTests {
 
         WebElement electronics_menu = driver.findElement(By.xpath("//a[contains(text(),'Electronics')]"));
 
-        wait.until(ExpectedConditions.elementToBeClickable(electronics_menu));
+        wait.until(ExpectedConditions.visibilityOf(electronics_menu));
 
         //*************** clicking the electronics menu directly, as there is no option under More menu ***********//
         actions.moveToElement(electronics_menu).click().build().perform();
 
+        if(!driver.getCurrentUrl().contains("electronics")){
+
+            actions.moveToElement(electronics_menu).click().build().perform();
+        }
+
+        driver.navigate().refresh();
+
         WebElement color_dropdown = driver.findElement(By.xpath("//button[contains(text(),'Color')]"));
+
+        wait.until(ExpectedConditions.visibilityOf(color_dropdown));
 
         actions.moveToElement(color_dropdown).build().perform();
 
@@ -91,8 +105,6 @@ public class HomeTownTests {
 
         System.out.println("In applied filter - color, the Black is still selected ");
 
-        driver.quit();
-
 
     }
 
@@ -106,5 +118,11 @@ public class HomeTownTests {
 
             return waitForStaleElement(locator); //recalls the function till the element on the page identified
         }
+    }
+
+    @After
+    public void closeBrowser(){
+
+        driver.quit();
     }
 }
