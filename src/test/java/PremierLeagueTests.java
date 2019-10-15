@@ -56,13 +56,9 @@ public class PremierLeagueTests {
 
         closeAddScreen(wait, ad_close_2);
 
-       // Thread.sleep(3000);
-
         WebElement arsenal_team = driver.findElement(By.xpath("//tbody[@class='tableBodyContainer isPL']//span[@class='long' and text()='Arsenal']"));
 
-        JavascriptExecutor executor = (JavascriptExecutor)driver;
-
-        //executor.executeScript("arguments[0].scrollIntoView();", arsenal_team);
+        JavascriptExecutor executor = (JavascriptExecutor) driver;
 
         executor.executeScript("window.scrollBy(0, 300)");
 
@@ -84,33 +80,31 @@ public class PremierLeagueTests {
 
         Set<String> all_windows = driver.getWindowHandles();
 
-        for (String window:all_windows) {
+        for (String window : all_windows) {
 
-            if(!window.equals(parent_window)){
+            if (!window.equals(parent_window)) {
                 driver.switchTo().window(window);
                 WebElement official_website_url = driver.findElement(By.xpath("//div[@class='website']//a"));
-                System.out.println("The official website URL "+official_website_url.getText());
-                System.out.println("The page title of the newly opened window "+driver.getTitle());
+                System.out.println("The official website URL " + official_website_url.getText());
+                System.out.println("The page title of the newly opened window " + driver.getTitle());
             }
-        }       
+        }
         driver.switchTo().defaultContent();
 
-        System.out.println("The main window title "+driver.getTitle());
+        System.out.println("The main window title " + driver.getTitle());
 
         driver.quit();
-
-
     }
 
     /**
      * closing the add screen when displayed
      */
-    private void closeAddScreen(WebDriverWait wait, WebElement closeButton){
-        try{
+    private void closeAddScreen(WebDriverWait wait, WebElement closeButton) {
+        try {
             wait.until(ExpectedConditions.visibilityOf(closeButton));
             closeButton.click();
             System.out.println("The close button is displayed and closed");
-        }catch (TimeoutException e){
+        } catch (TimeoutException e) {
             System.out.println("Now the add screen is not displayed");
         }
     }
@@ -130,7 +124,7 @@ public class PremierLeagueTests {
     }
 
     @After
-    public void closeBrowser(){
+    public void closeBrowser() {
         driver.quit();
     }
 }
